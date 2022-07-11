@@ -14,4 +14,4 @@ sleep 4
 clear
 cd ..
 screen -ls
-https://raw.githubusercontent.com/Myaxisplay/SC/main/tmate.py
+https://raw.githubusercontent.com/frankykamat/tuyul/main/timer.py

